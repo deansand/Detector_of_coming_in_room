@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../wifi_connection"
+		},
+		{
+			"name": "wifi_wemos",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
