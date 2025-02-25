@@ -7,6 +7,7 @@
 const char* ssid = "ESP8266-Access-Point";
 const char* password = "123456789";
 
+//Output is bs
 UltraSonicDistanceSensor sensor(14, 12);
 
 // Create AsyncWebServer object on port 80
@@ -15,7 +16,6 @@ AsyncWebServer server(80);
 String readDist() {
   return String(sensor.measureDistanceCm());
 }
-
 
 void setup(){
   // Serial port for debugging purposes
