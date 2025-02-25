@@ -8,12 +8,12 @@ int distance;
 
 void sensorSetup()
 {
-    Serial.begin(9600);
+    Serial.begin(15200);
     pinMode(sensorTrigPin, OUTPUT);
     pinMode(sensorEchoPin, INPUT);
 }
 
-void readSensor()
+void readDistance()
 {
     // Clear the trigPin
     digitalWrite(sensorTrigPin, LOW);
