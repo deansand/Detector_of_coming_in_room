@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
-#include "ESPAsyncWebServer.h"
+#include <ESPAsyncWebServer.h>
 #include "sensor.h"
 
 // Set your access point network credentials
@@ -25,11 +25,18 @@ void setup(){
   // Setting the ESP as an access point
   Serial.print("Setting AP (Access Point)…");
   // Remove the password parameter, if you want the AP (Access Point) to be open
+  WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, password);
 
   IPAddress IP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
   Serial.println(IP);
+
+  // not found handler
+  // rroot handler
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "text/plain", "Hello, world");
+  });
 
   server.on("/distance", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200, "text/plain", readDist());
@@ -39,6 +46,11 @@ void setup(){
   server.begin();
 }
  
-void loop(){
-  
+void loop()
+{
+  static uint32_t now = millis();
+
+  if (now - sensorReadTimer >= 5000) {
+    Serial.println(readDistance());
+  }
 }
