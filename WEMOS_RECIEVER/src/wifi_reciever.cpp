@@ -2,6 +2,8 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266HTTPClient.h>
+#include "led_strip.h"
+#include "wifi_reciever.h"
 
 const char* ssid = "ESP8266-Access-Point";
 const char* password = "123456789";
@@ -10,8 +12,8 @@ const char* serverName = "http://192.168.4.1/distance";
 
 String distance;
 
-unsigned long previousTime = 0;
-const long timeout = 2000;
+uint32_t previousTime = 0;
+const uint32_t timeout = 2000;
 
 String httpGETRequest(const char* serverName) {
   WiFiClient client;
@@ -45,6 +47,8 @@ void setup() {
   }
   Serial.println("Connected");
   Serial.println(WiFi.localIP());
+
+  setupLedStrip();
 }
 
 void loop() {
@@ -58,4 +62,6 @@ void loop() {
       Serial.println("WiFi Disconnected");
     }
   }
+  loopUseLED();
+  yield();
 }

@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../for_git/Detector_of_coming_in_room/wifi_wemos"
+		},
+		{
+			"name": "WEMOS_RECIEVER",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

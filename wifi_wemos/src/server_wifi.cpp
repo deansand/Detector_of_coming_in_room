@@ -35,11 +35,11 @@ void setup(){
   // not found handler
   // rroot handler
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/plain", "Hello, world");
+    request->send(200, "text/", "Hello, world");
   });
 
   server.on("/distance", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/plain", readDist());
+    request->send(200, "text/distance", readDist());
   });
   
   // Start server
