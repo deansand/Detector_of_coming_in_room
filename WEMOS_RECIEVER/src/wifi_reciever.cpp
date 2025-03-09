@@ -8,8 +8,10 @@
 const char* ssid = "ESP8266-Access-Point";
 const char* password = "123456789";
 
-const char* serverName = "http://192.168.4.1/distance";
+const char* serverName = "http://192.168.4.2/distance";
+const char* serverName = "http://192.168.4.2/led";
 
+String ledData;
 String distance;
 
 uint32_t previousTime = 0;
@@ -57,6 +59,10 @@ void loop() {
     if(WiFi.status() == WL_CONNECTED) {
       distance = httpGETRequest(serverName);
       Serial.println("Distance:" + distance);
+      
+      ledData = httpGETRequest(serverName);
+      Serial.println("LED Data:" + ledData);
+
       previousTime = currentTime;
     } else {
       Serial.println("WiFi Disconnected");

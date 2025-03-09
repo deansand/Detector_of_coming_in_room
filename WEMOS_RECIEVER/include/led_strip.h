@@ -10,15 +10,21 @@
 #define RESOLUTION 256
 
 typedef struct {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
+    uint8_t RED;
+    uint8_t GREEN;
+    uint8_t BLUE;
 } rgb_t;
+
+enum ledColor {
+    RED,
+    GREEN,
+    BLUE
+};
 
 extern rgb_t ledColor;
 
 void setupLedStrip();
-void setLedColor(uint8_t red, uint8_t green, uint8_t blue);
+void setLedColor(uint8_t RED, uint8_t GREEN, uint8_t BLUE);
 void loopUseLED();
 
 #endif // LED_STRIP_H
