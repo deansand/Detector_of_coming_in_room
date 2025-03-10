@@ -12,10 +12,10 @@ void setLedColor(uint8_t red, uint8_t green, uint8_t blue) {
 const char* ssid = "ESP8266-Access-Point";
 const char* password = "123456789";
 
-//TODO: Set the IP address to 192.168.4.2
-//?Somewhy it constantly activate watchdog timer and reset the second board
-//?I think it's because of the IP address, but I can't find the solution
-IPAddress apIP(192, 168, 4, 2);
+
+IPAddress local_IP(192, 168, 4, 0);
+IPAddress gateway(192, 168, 4, 0);
+IPAddress subnet(255, 255, 255, 0);
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -29,14 +29,24 @@ void setup(){
   Serial.begin(115200);
   Serial.println();
   
+  // Configure the access point
+  if (!WiFi.softAPConfig(local_IP, gateway, subnet)) {
+    Serial.println("STA Failed to configure");
+  } else {
+    Serial.println("STA Configured");
+  }
+  
   // Initialize the sensor
   sensorSetup();
   
   // Setting the ESP as an access point
   Serial.print("Setting AP (Access Point)…");
-  // Remove the password parameter, if you want the AP (Access Point) to be open
-  WiFi.mode(WIFI_AP);
-  WiFi.softAP(ssid, password, apIP);
+  // Remove the password parameter if you want the AP (Access Point) to be open
+  if (WiFi.softAP(ssid, password)) {
+    Serial.println("AP Started");
+  } else {
+    Serial.println("AP Failed to start");
+  }
 
   IPAddress IP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
@@ -72,8 +82,7 @@ void setup(){
   });
 
   server.on("/distance", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/distance", readDist());
-
+    request->send(200, "text/plain", readDist());
   });
   
   server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -82,18 +91,9 @@ void setup(){
       uint8_t green = request->getParam("g")->value().toInt();
       uint8_t blue = request->getParam("b")->value().toInt();
       setLedColor(red, green, blue);
-      request->send(200, "text/confirm", "LED color set");
+      request->send(200, "text/plain", "LED color set");
     } else {
-      String html = "<html><body>"
-                    "<h1>LED Control</h1>"
-                    "<form action=\"/led\" method=\"get\">"
-                    "Red: <input type=\"number\" name=\"r\" min=\"0\" max=\"255\"><br>"
-                    "Green: <input type=\"number\" name=\"g\" min=\"0\" max=\"255\"><br>"
-                    "Blue: <input type=\"number\" name=\"b\" min=\"0\" max=\"255\"><br>"
-                    "<input type=\"submit\" value=\"Set LED Color\">"
-                    "</form>"
-                    "</body></html>";
-      request->send(200, "text/html", html);
+      request->send(400, "text/plain", "Missing parameters");
     }
   });
 

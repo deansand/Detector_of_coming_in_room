@@ -8,8 +8,9 @@
 const char* ssid = "ESP8266-Access-Point";
 const char* password = "123456789";
 
-const char* serverNameDistance = "http://192.168.4.2/distance";
-const char* serverNameLed = "http://192.168.4.2/led";
+//TODO: fix software WDT reset, hardware reset
+const char* serverNameDistance = "http://192.168.4.1/distance";
+const char* serverNameLed = "http://192.168.4.1/led";
 
 String ledData;
 String distance;
@@ -21,12 +22,13 @@ String httpGETRequest(const char* serverName) {
   WiFiClient client;
   HTTPClient http;
 
+  Serial.println("Starting HTTP request...");
   http.begin(client, serverName);
 
   int httpResponseCode = http.GET();
   String payload = "--";
 
-  if (httpResponseCode>0) {
+  if (httpResponseCode > 0) {
     Serial.print("HTTP Response code: ");
     Serial.println(httpResponseCode);
     payload = http.getString();
@@ -35,6 +37,7 @@ String httpGETRequest(const char* serverName) {
     Serial.println(httpResponseCode);
   }
   http.end();
+  Serial.println("HTTP request completed.");
   return payload;
 }
 
@@ -57,10 +60,12 @@ void loop() {
   unsigned long currentTime = millis();
   if(currentTime - previousTime >= timeout) {
     if(WiFi.status() == WL_CONNECTED) {
+      Serial.println("Starting distance and LED data requests...");
+      // Synchronously get distance and LED data
       distance = httpGETRequest(serverNameDistance);
-      Serial.println("Distance:" + distance);
-      
       ledData = httpGETRequest(serverNameLed);
+
+      Serial.println("Distance:" + distance);
       Serial.println("LED Data:" + ledData);
 
       previousTime = currentTime;
@@ -68,6 +73,5 @@ void loop() {
       Serial.println("WiFi Disconnected");
     }
   }
-  loopUseLED();
-  yield();
+  loopUseLED(&ledColor);
 }

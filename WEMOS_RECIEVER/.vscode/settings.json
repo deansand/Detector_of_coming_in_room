@@ -3,6 +3,7 @@
         "bitset": "cpp",
         "memory": "cpp",
         "random": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "thread": "cpp"
     }
 }

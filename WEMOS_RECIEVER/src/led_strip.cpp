@@ -16,32 +16,43 @@ void setupLedStrip() {
 }
 
 void setLedColor(rgb_t color) {
-    analogWrite(RED_PIN, color.RED);
-    analogWrite(GREEN_PIN, color.GREEN);
-    analogWrite(BLUE_PIN, color.BLUE);
+    analogWrite(RED_PIN, color.red);
+    analogWrite(GREEN_PIN, color.green);
+    analogWrite(BLUE_PIN, color.blue);
 }
 
-void loopUseLED() {
-    if (priority == 1) {
+
+void loopUseLED(rgb_t *color) {
+    if (priority == 1) 
+    {
         if (distance.toInt() < 15) {
-            ledColor.RED = 255;
-            ledColor.GREEN = 0;
-            ledColor.BLUE = 0;
+            color->red = UINT8_MAX;
+            color->green = 0;
+            color->blue = 0;
         } else {
-            ledColor.RED = 0;
-            ledColor.GREEN = 0;
-            ledColor.BLUE = 255;
+            color->red = 0;
+            color->green = 0;
+            color->blue = UINT8_MAX;
         }
     } else {
-        if (ledData.length() > 0) {
-            int red = ledData.substring(0, ledData.indexOf(',')).toInt();
-            int green = ledData.substring(ledData.indexOf(',') + 1, ledData.lastIndexOf(',')).toInt();
-            int blue = ledData.substring(ledData.lastIndexOf(',') + 1).toInt();
-
-            ledColor.RED = red;
-            ledColor.GREEN = green;
-            ledColor.BLUE = blue;
-        }
+        color = &setLedWeb(ledData);
     }
     setLedColor(ledColor);
+}
+
+rgb_t setLedWeb(String data) {
+    // ledData = data;
+    rgb_t rgb;
+    if (data.length() > 0) {
+       
+        rgb.red = data.substring(0, data.indexOf(',')).toInt();
+        rgb.green = data.substring(data.indexOf(',') + 1, data.lastIndexOf(',')).toInt();
+        rgb.blue = data.substring(data.lastIndexOf(',') + 1).toInt();
+
+        // color->red = red;
+        // color->green = green;
+        // color->blue = blue;
+
+    }
+    return rgb;
 }
