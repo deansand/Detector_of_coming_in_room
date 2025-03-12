@@ -13,8 +13,8 @@ const char* ssid = "ESP8266-Access-Point";
 const char* password = "123456789";
 
 
-IPAddress local_IP(192, 168, 4, 0);
-IPAddress gateway(192, 168, 4, 0);
+IPAddress local_IP(192, 168, 4, 1);
+IPAddress gateway(192, 168, 4, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 // Create AsyncWebServer object on port 80

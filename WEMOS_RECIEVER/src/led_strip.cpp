@@ -21,25 +21,6 @@ void setLedColor(rgb_t color) {
     analogWrite(BLUE_PIN, color.blue);
 }
 
-
-void loopUseLED(rgb_t *color) {
-    if (priority == 1) 
-    {
-        if (distance.toInt() < 15) {
-            color->red = UINT8_MAX;
-            color->green = 0;
-            color->blue = 0;
-        } else {
-            color->red = 0;
-            color->green = 0;
-            color->blue = UINT8_MAX;
-        }
-    } else {
-        color = &setLedWeb(ledData);
-    }
-    setLedColor(ledColor);
-}
-
 rgb_t setLedWeb(String data) {
     // ledData = data;
     rgb_t rgb;
@@ -56,3 +37,23 @@ rgb_t setLedWeb(String data) {
     }
     return rgb;
 }
+
+void loopUseLED(rgb_t *color) {
+    if (priority == 1) 
+    {
+        if (distance.toInt() < 15) {
+            color->red = UINT8_MAX;
+            color->green = 0;
+            color->blue = 0;
+        } else {
+            color->red = 0;
+            color->green = 0;
+            color->blue = UINT8_MAX;
+        }
+    } else {
+        rgb_t tempColor = setLedWeb(ledData);
+        *color = tempColor;
+    }
+    setLedColor(ledColor);
+}
+
