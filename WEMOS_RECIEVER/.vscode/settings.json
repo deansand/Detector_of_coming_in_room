@@ -5,5 +5,7 @@
         "random": "cpp",
         "optional": "cpp",
         "thread": "cpp"
-    }
+    },
+    "github.copilot.chat.followUps": "never",
+    "github.copilot.chat.testGeneration.instructions": []
 }

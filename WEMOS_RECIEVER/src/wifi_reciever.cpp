@@ -57,7 +57,7 @@ void setup() {
 }
 
 void loop() {
-  unsigned long currentTime = millis();
+  uint32_t currentTime = millis();
   if(currentTime - previousTime >= timeout) {
     if(WiFi.status() == WL_CONNECTED) {
       Serial.println("Starting distance and LED data requests...");

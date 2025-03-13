@@ -3,6 +3,9 @@
 
 const uint8_t priority = 1;
 
+uint32_t previousTime = 0;
+const uint32_t timeout = 7000;
+
 extern String distance;
 extern String ledData;
 
@@ -39,12 +42,14 @@ rgb_t setLedWeb(String data) {
 }
 
 void loopUseLED(rgb_t *color) {
+    uint32_t currentTime = millis();
     if (priority == 1) 
     {
-        if (distance.toInt() < 15) {
-            color->red = UINT8_MAX;
-            color->green = 0;
-            color->blue = 0;
+        if (distance.toInt() < 15 && currentTime - previousTime >= timeout) {
+                color->red = UINT8_MAX;
+                color->green = 0;
+                color->blue = 0;
+                previousTime = currentTime;
         } else {
             color->red = 0;
             color->green = 0;
